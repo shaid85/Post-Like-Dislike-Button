@@ -1,6 +1,7 @@
-function ews_like_ajax(postId, userId) {
-    var post_id = postId;
+function ews_like_ajax(userId, postId) {
+
     var user_id = userId;
+    var post_id = postId;
 
 
     jQuery.ajax({

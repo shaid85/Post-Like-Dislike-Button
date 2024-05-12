@@ -88,3 +88,18 @@ function ews_like_ajax_action()
 }
 add_action('wp_ajax_ews_like_ajax_action', 'ews_like_ajax_action');
 add_action('wp_ajax_nopriv_ews_like_ajax_action', 'ews_like_ajax_action');
+
+function ews_show_like_count($content)
+{
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'like_system';
+    $post_id = get_the_ID();
+    $like_count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE post_id=$post_id AND like_count=1");
+
+    $result_like = '<div class="tottal-like">This post has been liked <strong>' . $like_count . '</strong>, time(s)</div>';
+
+    $content .= $result_like;
+
+    return $content;
+}
+add_action('the_content', 'ews_show_like_count');
