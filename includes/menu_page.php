@@ -31,7 +31,7 @@ function ews_plugin_settings()
     register_setting('ews_settings', 'ews_like_btn_label');
     register_setting('ews_settings', 'ews_dislike_btn_label');
 
-    add_settings_section('ews_label_settings_section', 'Ews button labels', 'ews_plugin_settings_section_cb', 'ews_settings');
+    add_settings_section('ews_label_settings_section', '', 'ews_plugin_settings_section_cb', 'ews_settings');
 
     add_settings_field('ews_like_label_field', 'Like Button Label', 'ews_lilke_label_field_cb', 'ews_settings', 'ews_label_settings_section');
 
@@ -41,7 +41,7 @@ add_action('admin_init',  'ews_plugin_settings');
 
 function ews_plugin_settings_section_cb()
 {
-    echo '<p>Define Button Labels</>';
+    echo '<p>Update Like and Dislike button label </>';
 }
 
 function ews_lilke_label_field_cb()
