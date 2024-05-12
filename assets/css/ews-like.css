@@ -6,8 +6,8 @@
   display: flex;
   width: 150px;
   padding: 15px 20px 10px;
-  background-color: #5f81dd;
-  border: 1px solid #2c468b;
+  background-color: #abadaf;
+  border: 1px solid #484e5c;
   text-align: center;
   text-transform: uppercase;
   color: #fff;
@@ -18,13 +18,16 @@
 .ews-btn span {
   margin-right: 2px;
 }
-.ews-btn:hover {
+.ews-btn:hover,
+.ews-btn.active {
   background-color: #3558b9;
+  border: 1px solid #081024;
   text-decoration: none;
 }
 .ews-dislike-btn {
   background-color: #abadaf;
 }
-.ews-dislike-btn:hover {
+.ews-dislike-btn:hover,
+.ews-dislike-btn.active {
   background-color: #424344;
 }

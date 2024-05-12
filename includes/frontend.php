@@ -4,6 +4,10 @@
 
 function ews_like_dislike_buttons($content)
 {
+    if (is_page()) {
+        return $content;
+    }
+
     $ews_like_label = get_option('ews_like_btn_label', 'Like');
     $ews_dislike_label = get_option('ews_dislike_btn_label', 'Dislike');
 
@@ -25,4 +29,4 @@ function ews_like_dislike_buttons($content)
 
     return $content;
 }
-add_action('the_content', 'ews_like_dislike_buttons');
+add_filter('the_content', 'ews_like_dislike_buttons');
