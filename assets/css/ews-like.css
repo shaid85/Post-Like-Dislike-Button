@@ -1,0 +1,30 @@
+.like-wrap {
+  display: flex;
+  gap: 20px;
+}
+.ews-btn {
+  display: flex;
+  width: 150px;
+  padding: 15px 20px 10px;
+  background-color: #5f81dd;
+  border: 1px solid #2c468b;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+  transition: 0.5s all;
+  justify-content: center;
+  text-decoration: none;
+}
+.ews-btn span {
+  margin-right: 2px;
+}
+.ews-btn:hover {
+  background-color: #3558b9;
+  text-decoration: none;
+}
+.ews-dislike-btn {
+  background-color: #abadaf;
+}
+.ews-dislike-btn:hover {
+  background-color: #424344;
+}
