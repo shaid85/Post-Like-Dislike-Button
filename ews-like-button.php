@@ -30,7 +30,12 @@ if (!function_exists('ewslike_enqueue_scripts')) {
     {
         wp_enqueue_style('ews-like', EWSLIKE_PLUGIN_DIR . 'assets/css/ews-like.css', array(), '1.0', 'all');
         wp_enqueue_style('ews-svg', EWSLIKE_PLUGIN_DIR . 'assets/css/svg.css', array(), '1.0', 'all');
-        wp_enqueue_script('ews-like', EWSLIKE_PLUGIN_DIR . 'assets/js/likebtn-ajax.js', ['jquery'], '1.0', true);
+        wp_enqueue_script('ews-like', EWSLIKE_PLUGIN_DIR . 'assets/js/main.js', ['jquery'], '1.0', true);
+        wp_enqueue_script('ews-ajax', EWSLIKE_PLUGIN_DIR . 'assets/js/ajax.js', ['jquery'], '1.0', true);
+
+        wp_localize_script('ews-ajax', 'ews_ajax_obj', array(
+            'ajax_url' => admin_url('admin-ajax.php')
+        ));
     }
     add_action('wp_enqueue_scripts', 'ewslike_enqueue_scripts');
 }
@@ -40,21 +45,46 @@ require plugin_dir_path(__FILE__) . 'includes/menu_page.php';
 
 // Crearte Table for our plugin.
 require plugin_dir_path(__FILE__) . 'includes/db_settings.php';
-
+// Actication hook
 register_activation_hook(__FILE__, 'ewslike_plugin_table');
 
 // Create Like & Dislike Buttons using filter.
-function ews_like_dislike_buttons($content)
-{
-    $btn_container = '<div class="like-wrap">';
-    $btn_container_end = '</div>';
-    $like_btn = '<a href="javascript:;" class="ews-btn ews-like-btn"><span class="gicon-thumb-up"></span> Like</a>';
-    $dislike_btn = '<a href="javascript:;" class="ews-btn ews-dislike-btn"><span class="gicon-thumb-down"></span> Dislike</a>';
-    $content .= $btn_container;
-    $content .= $like_btn;
-    $content .= $dislike_btn;
-    $content .= $btn_container_end;
+require plugin_dir_path(__FILE__) . 'includes/frontend.php';
 
-    return $content;
+
+// Plugin Ajax Function
+function ews_like_ajax_action()
+{
+    global $wpdb;
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+    $table_name = $wpdb->prefix . 'like_system';
+    if (isset($_POST['pid']) && isset($_POST['uid'])) {
+        $user_id = $_POST['uid'];
+        $post_id = $_POST['pid'];
+        $check_user = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE user_id = $user_id AND post_id = $post_id");
+        if ($check_user > 0) {
+            echo "Sorry, you already liked this post!";
+        } else {
+            $wpdb->insert(
+                $table_name,
+                array(
+                    'post_id' => $_POST['pid'],
+                    'user_id' => $_POST['uid'],
+                    'like_count' => 1
+                ),
+                array(
+                    '%d',
+                    '%d',
+                    '%d'
+                )
+            );
+            if ($wpdb->insert_id) {
+                echo "Thank you for like";
+            }
+        }
+    }
+    wp_die();
 }
-add_action('the_content', 'ews_like_dislike_buttons');
+add_action('wp_ajax_ews_like_ajax_action', 'ews_like_ajax_action');
+add_action('wp_ajax_nopriv_ews_like_ajax_action', 'ews_like_ajax_action');
